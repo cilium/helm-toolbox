@@ -1,4 +1,4 @@
-ARG GO_VERSION=1.18.3
+ARG GO_VERSION=1.19.5
 ARG PY_VERSION=3.9.13
 
 FROM --platform=${BUILDPLATFORM} golang:${GO_VERSION}-bullseye as gobuilder
