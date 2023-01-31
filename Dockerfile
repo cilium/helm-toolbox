@@ -32,7 +32,7 @@ ARG TARGETARCH
 # TARGETOS is an automatic platform ARG enabled by Docker BuildKit.
 ARG TARGETOS
 
-RUN python3 -m pip install m2r2==0.3.2
+RUN python3 -m pip install m2r2==0.3.3
 RUN rm -rf -- /usr/local/lib/python*/site-packages/pip*
 RUN rm -rf -- /usr/local/lib/python*/site-packages/setuptools*
 RUN rm -rf -- /usr/local/lib/python*/site-packages/wheel*
