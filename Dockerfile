@@ -18,7 +18,7 @@ RUN curl -sS -L https://get.helm.sh/helm-v${HELM_VERSION}-${TARGETOS}-${TARGETAR
     && cp ${TARGETOS}-${TARGETARCH}/helm /go/bin/helm
 #
 WORKDIR /go/src/
-RUN git clone https://github.com/norwoodj/helm-docs -b v1.10.0 \
+RUN git clone https://github.com/norwoodj/helm-docs -b v1.11.0 \
     && cd helm-docs \
     && go build ./cmd/helm-docs \
     && cp helm-docs /go/bin/helm-docs
