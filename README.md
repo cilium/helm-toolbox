@@ -5,6 +5,7 @@ markdown content. Includes:
 
 * [helm](https://github.com/helm/helm)
 * [helm-docs](https://github.com/norwoodj/helm-docs)
+* [helm-schema](https://github.com/dadav/helm-schema)
 * [m2r2](https://github.com/CrossNox/m2r2)
 
 ## Building the image
@@ -21,6 +22,7 @@ $ docker buildx build --platform ${PLATFORMS} . -t quay.io/cilium/helm-toolbox:$
 ```
 $ docker container run THIS-IMAGE helm ...
 $ docker container run --rm --workdir /src/install/kubernetes --volume /path/to/cilium/:/src --user "1001:1001" THIS-IMAGE /usr/bin/helm-docs ...
+$ docker container run --rm --workdir /src/install/kubernetes --volume /path/to/cilium/:/src --user "1001:1001" THIS-IMAGE /usr/bin/helm-schema -c /src/install/kubernetes ...
 $ docker container run THIS-IMAGE python3 /usr/bin/m2r2 ...
 ```
 

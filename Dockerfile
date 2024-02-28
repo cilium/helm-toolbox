@@ -23,8 +23,14 @@ RUN git clone https://github.com/norwoodj/helm-docs -b v1.11.0 \
     && go build ./cmd/helm-docs \
     && cp helm-docs /go/bin/helm-docs
 
+RUN git clone https://github.com/dadav/helm-schema -b 0.9.0 \
+    && cd helm-schema \
+    && go build ./cmd/helm-schema \
+    && cp helm-schema /go/bin/helm-schema
+
 RUN chmod +x /go/bin/helm
 RUN chmod +x /go/bin/helm-docs
+RUN chmod +x /go/bin/helm-schema
 
 FROM --platform=${BUILDPLATFORM} python:${PY_VERSION}-bullseye as pybuilder
 # TARGETARCH is an automatic platform ARG enabled by Docker BuildKit.
@@ -52,6 +58,7 @@ ARG PY_MINOR=3.9
 
 COPY --from=gobuilder /go/bin/helm /usr/bin/helm
 COPY --from=gobuilder /go/bin/helm-docs /usr/bin/helm-docs
+COPY --from=gobuilder /go/bin/helm-schema /usr/bin/helm-schema
 COPY --from=pybuilder /usr/local/lib/python${PY_MINOR}/site-packages /usr/local/lib/python${PY_MINOR}/dist-packages/
 COPY --from=pybuilder /usr/local/bin/m2r2 /usr/bin/m2r2
 
