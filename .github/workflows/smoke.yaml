@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  build-and-push-prs:
+  build-and-test-prs:
     if: ${{ github.repository == 'cilium/helm-toolbox' }}
     runs-on: ubuntu-22.04
     strategy:
@@ -35,5 +35,5 @@ jobs:
           ref: ${{ steps.tag.outputs.tag }}
 
       - name: Run the tests
-        runs: |
+        run: |
           make test TAG="${{ steps.tag.outputs.tag }}"
