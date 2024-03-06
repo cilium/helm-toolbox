@@ -1,9 +1,11 @@
 #!/bin/bash
 
 TAG ?= latest
+REPO ?= cilium/helm-toolbox
+PLATFORMS ?= linux/amd64,linux/arm64
 
 CONTAINER_ENGINE=docker
-HELM_TOOLBOX_IMAGE=quay.io/cilium/helm-toolbox:$(TAG)
+HELM_TOOLBOX_IMAGE=quay.io/$(REPO):$(TAG)
 DOCKER_RUN := $(CONTAINER_ENGINE) container run --rm \
         --workdir /src/ \
         --volume $(CURDIR)/cilium:/src/cilium \
@@ -18,7 +20,7 @@ all: test
 .PHONY:
 build:
 	# Note that there's no multiplatform or push here.
-	$(CONTAINER_ENGINE) buildx build . -t quay.io/cilium/helm-toolbox:${TAG} --load
+	$(CONTAINER_ENGINE) buildx build . -t quay.io/$(REPO):${TAG} --load
 
 .PHONY:
 pull-cilium:
@@ -32,3 +34,11 @@ test: build pull-cilium
 	$(HELM) lint --with-subcharts --values ./cilium/values.yaml ./cilium
 	$(HELM_DOCS)
 	$(HELM_SCHEMA_GEN) -c cilium --skip-auto-generation title,description,required,default,additionalProperties
+
+.PHONY:
+publish:
+	$(CONTAINER_ENGINE) buildx create --use --platform ${PLATFORMS}
+	$(CONTAINER_ENGINE) buildx build . \
+		--platform ${PLATFORMS} \
+		-t quay.io/$(REPO):${TAG} \
+		--push
