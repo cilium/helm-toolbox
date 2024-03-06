@@ -1,0 +1,39 @@
+name: Smoke tests
+
+on:
+  pull_request: {}
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push-prs:
+    if: ${{ github.repository == 'cilium/helm-toolbox' }}
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        include:
+          - name: helm-toolbox
+            dockerfile: ./Dockerfile
+
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@0d103c3126aa41d772a8362f6aa67afac040f80c
+
+      - name: Getting image tag
+        id: tag
+        run: |
+          if [ ${{ github.event.pull_request.head.sha }} != "" ]; then
+            echo tag=${{ github.event.pull_request.head.sha }} >> $GITHUB_OUTPUT
+          else
+            echo tag=${{ github.sha }} >> $GITHUB_OUTPUT
+          fi
+
+      - name: Checkout Source Code
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+        with:
+          ref: ${{ steps.tag.outputs.tag }}
+
+      - name: Run the tests
+        runs: |
+          make test TAG="${{ steps.tag.outputs.tag }}"
