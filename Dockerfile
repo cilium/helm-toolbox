@@ -43,16 +43,16 @@ RUN rm -rf -- /usr/local/lib/python*/site-packages/pip*
 RUN rm -rf -- /usr/local/lib/python*/site-packages/setuptools*
 RUN rm -rf -- /usr/local/lib/python*/site-packages/wheel*
 
-# distroless images are signed by cosign. You should verify the image with the following public key:
-# $ cat cosign.pub
-# -----BEGIN PUBLIC KEY-----
-# MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEWZzVzkb8A+DbgDpaJId/bOmV8n7Q
-# OqxYbK0Iro6GzSmOzxkn+N2AKawLyXi84WSwJQBK//psATakCgAQKkNTAA==
-# -----END PUBLIC KEY-----
-# $ cosign verify --key cosign.pub $BASE_IMAGE
-# The key may be found at the following address:
-# https://raw.githubusercontent.com/GoogleContainerTools/distroless/main/cosign.pub
-FROM gcr.io/distroless/python3-debian11:latest@sha256:2c05efc535a1f34772a2cd9e7115fa69f48e115a01c0b7bd96d87030e5a95eec
+# distroless images are signed by cosign. You should verify the image with the following command:
+#
+# $ cosign verify $IMAGE_NAME --certificate-oidc-issuer https://accounts.google.com  --certificate-identity keyless@distroless.iam.gserviceaccount.com
+#
+# Cosign may be found at the following address:
+# https://github.com/sigstore/cosign
+#
+# For more information, see:
+# https://github.com/GoogleContainerTools/distroless?tab=readme-ov-file#how-do-i-verify-distroless-images
+FROM gcr.io/distroless/python3-debian12:latest@sha256:d1427d962660c43d476b11f9bb7d6df66001296bba9577e39b33d2e8897614cd
 
 ARG PY_MINOR=3.9
 
