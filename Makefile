@@ -33,6 +33,7 @@ pull-cilium:
 test: build pull-cilium
 	$(HELM) lint --with-subcharts --values ./cilium/values.yaml ./cilium
 	$(HELM_DOCS)
+	$(DOCKER_RUN) $(HELM_TOOLBOX_IMAGE) python3 /usr/bin/m2r2 --dry-run cilium/README.md >/dev/null
 	$(HELM_SCHEMA_GEN) -c cilium --skip-auto-generation title,description,required,default,additionalProperties
 
 .PHONY:
